@@ -31,28 +31,18 @@ priorRolls = {}
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
-@bot.command(name='99', help='Responds with a random quote from Brooklyn 99')
-async def nine_nine(ctx):
-    brooklyn_99_quotes = [
-        'I\'m the human form of the 💯 emoji.',
-        'Bingpot!',
-        (
-            'Cool. Cool cool cool cool cool cool cool, '
-            'no doubt no doubt no doubt no doubt.'
-        ),
-    ]
-
-    response = random.choice(brooklyn_99_quotes)
-    await ctx.send(response)
+def getDiceString(roll):
+    blankString = ' '.join(['◻️' for _ in range(roll.blanks)])
+    pointString = ' '.join(['🔵' for _ in range(roll.points)])
+    knotString = ' '.join(['💥' for _ in range(roll.knots)])
+    strings = [knotString, pointString, blankString]
+    return ' '.join([string for string in strings if string])
 
 @bot.command(name='roll', help='Simulates rolling dice.')
 async def roll(ctx, number_of_dice: int):
     dice = ExplosiveRoll(number_of_dice)
 
-    blankString = ' '.join(['◻️' for _ in range(dice.blanks)])
-    pointString = ' '.join(['🔵' for _ in range(dice.points)])
-    knotString = ' '.join(['💥' for _ in range(dice.knots)])
-    diceString = f'{knotString} {pointString} {blankString}'
+    diceString = getDiceString(dice)
 
     await ctx.send(f'{ctx.author} rolled {number_of_dice} dice\n{diceString}\nScore: {dice.points + dice.knots}\nKnots: {dice.knots}')
     if (dice.knots > 0):
@@ -67,8 +57,12 @@ async def explode(ctx):
         return
 
     prior = priorRolls[ctx.author]
+
+    if (prior.knots == 0):
+        await ctx.send(f'{ctx.author}`s prior roll has no knots.')
+        return
+
     prior.explode()
-    await ctx.send(f'{ctx.author} exploded their roll!')
 
     currentChild = prior.childRoll
     children = [currentChild]
@@ -77,6 +71,9 @@ async def explode(ctx):
         currentChild = currentChild.childRoll
         children.append(currentChild)
 
-    await ctx.send(f'number of children {len(children)}')
+    rollsString = '\n'.join([getDiceString(child) for child in children])
+    totalScore = sum([child.points + child.knots for child in children]) + prior.points + prior.knots
+
+    await ctx.send(f'{ctx.author} exploded their roll!\n{rollsString}\nTotal score: {totalScore}')
 
 bot.run(TOKEN)
