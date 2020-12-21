@@ -1,0 +1,31 @@
+Type,Name,Description,When Drawn,To Remove,On Removal,Footer,Quantity
+STAMINA,Spooked,"You narrowly avoid injury, leaving your confidence shaken.",Take one conviciton damage. -1 Attack until this is removed.,Take a short rest.,,,3
+STAMINA,Stunned,A jolt of pain. Your instincts take over. The outside world fades to a blur...,Take one conviciton damage. -1 Evade until this is removed.,Take a short rest.,,,3
+STAMINA,Strained,"A twisted ankle or bruise. Not too bad, but needs some time to recover.","Halve your max stamina (rounding up), take one conviction damage.",Take a long rest.,,,3
+STAMINA,Embarassed,"You do something stupid. Most likely, allowing yourself to be disarmed.",Take one authority damage. GM chooses one of your items to fall off or break.,Get back the item or deem it irrepearable.,,,3
+STAMINA,Bloodied,"You take a hit somewhere visible. You feel fine, but you look like garbage.",-1 Social,Difficulty 3.,+1 on any characteristic.,"Cannot leave a characteristic below 2, or raise one above 5.",3
+STAMINA,Deep Pain,"You've pulled something, or bruised something, creating a dull, throbbing pain.",-1 Disciplined,Difficulty 6.,+1 on any characteristic.,"Cannot leave a characteristic below 2, or raise one above 5.",3
+STAMINA,Knocked Out!,You fall completely unconscious.,,Wait the length of a short rest.,"Wake up, take one conviction damage.",,3
+STAMINA,Minor Wound,"A lost finger, or a grazed eye. Will leave a scar, but not fatal.",The DM reduces one of your skills by one.,Difficulty 4.,,,3
+STAMINA,Major Wound,"A spear in the thigh, or a sword in the shoulder. Risks becoming infected.","-1 to all rolls until this is removed. If you are not treated in the next few days, you die.",Difficulty 7.,,,3
+STAMINA,Crippling Wound,"A severed tendon, a blinded eye. Permanantly changes your life.","GM chooses one of your skills. Reduce it to 2 (if it is greater). Draw two additional circles next to it on your character sheet, from now on, levellng up this skill will reuire two additional points.",Difficulty 7.,,,2
+STAMINA,Instant Death,,You die,,,,1
+CONVICTION,Distracted,"Thoughts plague your mind, making it hard to focus.",-1 Disciplined until this is removed.,Take a long rest.,,,3
+CONVICTION,Confused,"Something happened, now it's hard to think about anything else.",-1 Creative until this is removed.,Take a long rest.,,,3
+CONVICTION,Embarassed,"You say something stupid, or get too angry.",Take one Authority damage,Take a long rest. This does not reset the damage,,,6
+CONVICTION,Exhausted,"Your focus is dulled, your reflexes are slow. You need a break.",-1 max Stamina until this is removed.,Difficulty 4 empath check (cannot pass with damage).,,,3
+CONVICTION,Depressed,,-1 max Conviction until this is removed.,Difficulty 4 empath check (cannot pass with damage).,,,3
+CONVICTION,Off The Rails,"You may feel fine right now, but when you next take a long rest, you’ll do something foolish.",,Long rest.,Sustain a physical wound. Explain what you did.,,3
+CONVICTION,Jaded,You idiot. Clearly the problem here is that you’re too good to people.,-1 Kind,Difficulty 5 empath check (cannot pass with damage).,+1 on any characteristic.,"Cannot leave a characteristic below 2, or raise one above 5.",3
+CONVICTION,Shaken,"You start to question, who are you? What are you doing with your life?",-1 Attack,Difficulty 5 empath check (cannot pass with damage).,+1 on any characteristic.,"Cannot leave a characteristic below 2, or raise one above 5.",3
+CONVICTION,Transformed,,The GM reduces one of your characteristics to 2.,Difficulty 6 empath check (cannot pass with damage).,"Restore that characteristic to how it was, you may move one point from it into any other characteristic.","Cannot leave a characteristic below 2, or raise one above 5.",2
+CONVICTION,Insane,,Pass control of your character to the GM.,Difficulty 5 empath check (cannot pass with damage).,Return to your previous max conviction -1.,,1
+AUTHORITY,Undermined,You've been given an opportunity to avoid consequences. It might come back to bite you.,"-1 max Conviction, permanently.",Take a very long rest. This doesn’t reset the damage.,,,3
+AUTHORITY,Distrusted,"People don't trust you very much at the moment, well, you don’t trust them either!","-1 max Authority, permanently. -1 Kind until this is removed.",Pass a check using Kind.,,,6
+AUTHORITY,Disliked,"People think you're 'uncool', but you’re not uncool, right? Right?","-1 max Authority, permanently. -1 Social until this is removed.",Pass a check using Social.,,,6
+AUTHORITY,Humiliated,"People think you're an idiot, and you’re starting to agree.","-1 Creative, -1 max Authority.",Difficulty 6 empath check (cannot pass with damage).,+1 on any characteristic.,"Cannot leave a characteristic below 2, or raise one above 5.",3
+AUTHORITY,Desperate,"One victory, and maybe this will be ok (it won't).","-1 Evade, -1 max Authority.",Difficulty 6 empath check (cannot pass with damage).,+1 on any characteristic.,"Cannot leave a characteristic below 2, or raise one above 5.",3
+AUTHORITY,Threat,,"-1 max authority, permanently. ",Wait until the GM says it is time.,One or more individuals that the player has wronged will do something terrible to get their own back.,,3
+AUTHORITY,Enemy,,"-1 max authority, permanently. Someone the player character used to consider a friend will turn against them.","Win back the favour of this individual, or defeat them.",,,3
+AUTHORITY,Exiled,,Halve your max authority (rounding down). You are no longer welcome among the Weal.,Decided by GM. Perhaps impossible.,Return to your previous max authority -1.,,2
+AUTHORITY,Doomed,,"Now, or very soon. Someone will attempt to execute or assasinate the player. If this attempt fails, reduce the player's authority to 2, they are now on the run.",,,,1
