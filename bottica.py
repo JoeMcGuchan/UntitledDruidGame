@@ -41,7 +41,7 @@ staminaDeck = []
 convictionDeck = []
 authorityDeck = []
 
-with open('cards/wounds.csv', newline='') as csvWounds:
+with open('../cards/wounds.csv', newline='') as csvWounds:
     woundsReader = csv.DictReader(csvWounds, delimiter=',', quotechar='"')
     for row in woundsReader:
         for _ in range(int(row["Quantity"])):
@@ -185,7 +185,6 @@ def getItemString(card):
     value = f'{card["Value"]}'
     lines.append(' '.join([s for s in [name, value] if s]))
 
-
     flavour = card["Flavour"]
     if flavour:
         flavour = f'*{flavour}*'
@@ -220,11 +219,15 @@ def getItemString(card):
     if mainBonus2:
         mainBonus2 = f'**{mainBonus2}**'
 
+    mainBonus2Secondary = card["Bonus 2 Secondary"]
+    if mainBonus2:
+        mainBonus2 = f'**{mainBonus2}**'
+
     skills2 = card["Skills 2"]
     if skills2:
         skills2 = f'*{skills2}*'
 
-    lines.append(' | '.join([s for s in [conflictClass2, mainBonus2, skills2] if s]))
+    lines.append(' | '.join([s for s in [conflictClass2, mainBonus2, mainBonus2Secondary, skills2] if s]))
 
 
     rarity = f'{card["Rarity"].lower()}'
@@ -242,7 +245,7 @@ async def item(ctx, name : str):
     matchingItems = []
     p = re.compile(name, re.IGNORECASE)
 
-    with open('cards/items.csv', newline='') as csvItems:
+    with open('../cards/items.csv', newline='') as csvItems:
         itemsReader = csv.DictReader(csvItems, delimiter=',', quotechar='"')
         for card in itemsReader:
             if (p.search(card["Name"].lower())):

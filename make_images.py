@@ -1,139 +1,244 @@
-"""
 import sys
+import csv
+
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+
+cardSideMargins = 10
+standardSpacing = 10
+equipRulesIndent = 8
+descriptionMargin = 7
+
+topHalfStretchFacor = 5
+bottomHalfStretchFactor = 7
 
 filename = 'Screenshot.jpg'
 app = QApplication(sys.argv)
-topWidget = QWidget()
-topWidget.setLayout(QVBoxLayout())
-label = QLabel()
-topWidget.layout().addWidget(label)
 
-def take_screenshot():
-    picture = app.primaryScreen().grabWindow(topWidget.winId())
-    picture.save(filename, 'jpg')
+celticFontId = QFontDatabase.addApplicationFont("../fonts/MeathFLF.ttf");
+celticFontFamily = QFontDatabase.applicationFontFamilies(celticFontId)[0];
+basicFontFamily = "arial"
 
-topWidget.layout().addWidget(QPushButton('take screenshot', clicked=take_screenshot))
+celticTitle = QFont(celticFontFamily, 48)
+celticExtraLarge = QFont(celticFontFamily, 64)
+basicFont = QFont(basicFontFamily, 14)
+basicFontItalic = QFont(basicFontFamily, 14, italic = True)
+basicFontMedium = QFont(basicFontFamily, 24)
+basicFontLarge = QFont(basicFontFamily, 36)
 
-topWidget.show()
-app.exec_()
-"""
-import sys
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-
-cardSideMargins = 20
-
-
+dataFile = "../cards/items.csv"	
 
 class Card: 
+	name = "Brooch"
+	cost = "2"
+	rarity = "Common"
+	equipRules = "- Requires completing a special quest."
+	uses = 0
+	description = "Worn at the shoulder or chest, carefully crafted bronze or iron. Often associated with a noble family."
+
+	situation = "Persuade / Command"
+	bonusMain = "+3 Dice"
+	bonusSecondary = "Once check per long rest, double all 4s and halve all 8s"
+	skills = "Charmer, Persuader, etc"
+
+	secondAbility = True
+	situation2 = "Attack - Melee"
+	bonusMain2 = "+3 Dice"
+	bonusSecondary2 = "Eat all the rice"
+	skills2 = "yum yum yum"
+
 	def draw(self, app):
-		wholeCard = QWidget()
-		wholeCard.resize(600, 500)
+		backgroundPixmap = QPixmap()
+
+		if (self.secondAbility):
+			backgroundPixmap.load("../images/item_card_double.png")
+		else:
+			backgroundPixmap.load("../images/item_card_single.png")
+
+		wholeCard = QLabel()
+		wholeCard.setPixmap(backgroundPixmap)
+		wholeCard.resize(600, 600)
 		wholeCard.setLayout(QVBoxLayout())
+		wholeCard.layout().setSpacing(standardSpacing)
+		wholeCard.layout().setContentsMargins(cardSideMargins,cardSideMargins,cardSideMargins,cardSideMargins)
 
-		topHalf = QWidget()
-		topHalf.setLayout(QVBoxLayout())
-
-		topTop = QWidget()
-		topTop.setLayout(QHBoxLayout())
+		topHalf = QFrame()
+		topHalf.setLayout(QGridLayout())
+		topHalf.layout().setSpacing(0)
+		topHalf.layout().setContentsMargins(0,0,0,0)
 
 		nameLabel = QLabel()
-		nameLabel.setText("Brooch")
-		topTop.layout().addWidget(nameLabel)
-
-		topRight = QWidget()
-		topRight.setLayout(QVBoxLayout())
-
-		rarityLabel = QLabel()
-		rarityLabel.setText("Common")
-		topRight.layout().addWidget(rarityLabel)
 
 		costLabel = QLabel()
-		costLabel.setText("2")
-		topRight.layout().addWidget(costLabel)
+		costLabel.setText(self.cost)
+		costLabel.setFont(celticExtraLarge)
 
-		topTop.layout().addWidget(topRight)
-
-		topHalf.layout().addWidget(topTop)
-
-		topBottom = QWidget()
-		topBottom.setLayout(QHBoxLayout())
-
-		topBottomLeft = QWidget()
-		topBottom.layout().addWidget(topBottomLeft)
-
-		topBottomMiddle = QWidget()
-		topBottomMiddle.setLayout(QVBoxLayout())
+		rarityLabel = QLabel()
+		rarityLabel.setText(self.rarity)
+		rarityLabel.setFont(basicFont)
 
 		equipRulesLabel = QLabel()
-		equipRulesLabel.setText("Requires completing a special quest")
-		topBottomMiddle.layout().addWidget(equipRulesLabel)
+		equipRulesLabel.setText(self.equipRules)
+		equipRulesLabel.setFont(basicFont)
 
 		descriptionLabel = QLabel()
-		descriptionLabel.setText("Worn at the shoulder or chest, carefully crafted bronze or iron. Often associated with a noble family.")
-		topBottomMiddle.layout().addWidget(descriptionLabel)
+		descriptionLabel.setText(self.description)
+		descriptionLabel.setAlignment(Qt.AlignLeft)
+		descriptionLabel.setFont(basicFontItalic)
+		descriptionLabel.setWordWrap(True)
 
-		topBottom.layout().addWidget(topBottomMiddle)
+		topHalf.layout().addWidget(nameLabel, 0,0,1,4)
+		topHalf.layout().addWidget(costLabel, 0,4,3,2)
+		topHalf.layout().addWidget(rarityLabel, 1,1,1,1)
+		topHalf.layout().addWidget(equipRulesLabel, 1,3,1,1)
+		topHalf.layout().addWidget(descriptionLabel, 3,1,1,4)
 
-		topBottomRight = QWidget()
-		topBottom.layout().addWidget(topBottomRight)
+		topHalf.layout().setColumnMinimumWidth(0,standardSpacing)
+		topHalf.layout().setColumnMinimumWidth(5,standardSpacing)
+		topHalf.layout().setColumnMinimumWidth(2,equipRulesIndent)
+		topHalf.layout().setRowMinimumHeight(2,descriptionMargin)
 
-		topHalf.layout().addWidget(topBottom)
+		topHalf.layout().setColumnStretch(3,1)
+		topHalf.layout().setRowStretch(3,1)
 
-		wholeCard.layout().addWidget(topHalf)
+		wholeCard.layout().addWidget(topHalf, topHalfStretchFacor)
 
-		bottomHalf = QWidget()
-		bottomHalf.setLayout(QHBoxLayout())
-
-		bottomLeft = QWidget()
-		bottomHalf.layout().addWidget(bottomLeft)
-
-		bottomMiddle = QWidget()
-		bottomMiddle.setLayout(QVBoxLayout())
+		bottomHalf = QFrame()
+		bottomHalf.setLayout(QGridLayout())
+		bottomHalf.layout().setSpacing(0)
+		bottomHalf.layout().setContentsMargins(0,0,0,0)
 
 		situationLabel = QLabel()
-		situationLabel.setText("Persuade / Command")
-		bottomMiddle.layout().addWidget(situationLabel)
+		situationLabel.setText(self.situation)
+		situationLabel.setFont(basicFont)
 
-		bottomCenter = QWidget()
-		bottomCenter.setLayout(QVBoxLayout())
+		bonusWidgetLayout = QVBoxLayout()
 
 		bonusMain = QLabel()
-		bonusMain.setText("+3 Dice")
-		bottomCenter.layout().addWidget(bonusMain)
+		bonusMain.setText(self.bonusMain)
+		bonusMain.setVisible(self.bonusMain != "")
+		bonusMain.setAlignment(Qt.AlignHCenter)
+		if (self.secondAbility):
+			bonusMain.setFont(basicFontMedium)
+		else:
+			bonusMain.setFont(basicFontLarge)
 
 		bonusSecondary = QLabel()
-		bonusSecondary.setText("Once check per long rest, double all 4s and halve all 8s")
-		bottomCenter.layout().addWidget(bonusSecondary)
+		bonusSecondary.setText(self.bonusSecondary)
+		bonusSecondary.setVisible(self.bonusSecondary != "")
+		bonusSecondary.setAlignment(Qt.AlignHCenter)
+		bonusSecondary.setWordWrap(True)
+		bonusSecondary.setFont(basicFontMedium)
 
-		bottomMiddle.layout().addWidget(bottomCenter)
+		bonusWidgetLayout.addSpacerItem(QSpacerItem(0,0,QSizePolicy.Minimum,QSizePolicy.MinimumExpanding))
+		bonusWidgetLayout.addWidget(bonusMain, 0)
+		bonusWidgetLayout.addWidget(bonusSecondary, 0)
+		bonusWidgetLayout.addSpacerItem(QSpacerItem(0,0,QSizePolicy.Minimum,QSizePolicy.MinimumExpanding))
 
 		skillsLabel = QLabel()
-		skillsLabel.setText("Charmer, Persuader, Politico, etc")
-		bottomMiddle.layout().addWidget(skillsLabel)
+		skillsLabel.setText(self.skills)
+		skillsLabel.setFont(basicFont)
 
-		bottomHalf.layout().addWidget(bottomMiddle)
+		bottomHalf.layout().addWidget(situationLabel, 0,1,1,1, Qt.AlignLeft | Qt.AlignVCenter)
+		bottomHalf.layout().addLayout(bonusWidgetLayout, 1,1,1,1)
+		bottomHalf.layout().addWidget(skillsLabel, 2,1,1,1, Qt.AlignRight | Qt.AlignVCenter)
 
-		bottomRight = QWidget()
-		bottomHalf.layout().addWidget(bottomRight)
+		bottomHalf.layout().setRowStretch(1,1)
+		bottomHalf.layout().setColumnStretch(1,1)
 
-		wholeCard.layout().addWidget(bottomHalf)
+		bottomHalf.layout().setColumnMinimumWidth(0,standardSpacing)
+		bottomHalf.layout().setColumnMinimumWidth(2,standardSpacing)
+
+		if (self.secondAbility):
+			situationLabel2 = QLabel()
+			situationLabel2.setText(self.situation2)
+			situationLabel2.setVisible(self.situation2 != "")
+			situationLabel2.setFont(basicFont)
+
+			bonusWidgetLayout2 = QVBoxLayout()
+
+			bonusMain2 = QLabel()
+			bonusMain2.setText(self.bonusMain2)
+			bonusMain2.setVisible(self.bonusMain2 != "")
+			bonusMain2.setAlignment(Qt.AlignHCenter)
+			bonusMain2.setFont(basicFontMedium)
+
+			bonusSecondary2 = QLabel()
+			bonusSecondary2.setText(self.bonusSecondary2)
+			bonusSecondary2.setAlignment(Qt.AlignHCenter)
+			bonusSecondary2.setWordWrap(True)
+			bonusSecondary2.setFont(basicFontMedium)
+
+			bonusWidgetLayout2.addSpacerItem(QSpacerItem(0,0,QSizePolicy.Minimum,QSizePolicy.MinimumExpanding))
+			bonusWidgetLayout2.addWidget(bonusMain2, 0)
+			bonusWidgetLayout2.addWidget(bonusSecondary2, 0)
+			bonusWidgetLayout2.addSpacerItem(QSpacerItem(0,0,QSizePolicy.Minimum,QSizePolicy.MinimumExpanding))
+
+			skillsLabel2 = QLabel()
+			skillsLabel2.setText(self.skills2)
+			skillsLabel2.setFont(basicFont)
+
+			bottomHalf.layout().addWidget(situationLabel2, 0,3,1,1, Qt.AlignLeft | Qt.AlignVCenter)
+			bottomHalf.layout().addLayout(bonusWidgetLayout2, 1,3,1,1)
+			bottomHalf.layout().addWidget(skillsLabel2, 2,3,1,1, Qt.AlignRight | Qt.AlignVCenter)
+
+			bottomHalf.layout().setColumnStretch(3,1)
+			bottomHalf.layout().setColumnMinimumWidth(4,standardSpacing)
+
+		wholeCard.layout().addWidget(bottomHalf, bottomHalfStretchFactor)
 
 		wholeCard.show()
+
+		#fit name text
+		fit = False
+
+		while (not fit):
+			fm = QFontMetrics(celticTitle)
+			bound = fm.boundingRect(0,0, nameLabel.width(), nameLabel.height(), Qt.TextWordWrap | Qt.AlignLeft, self.name)
+			print(bound)
+			print(nameLabel.width())
+			print(nameLabel.height())
+
+			if ((bound.width() <= nameLabel.width()) and (bound.height() <= nameLabel.height())):
+				fit = True
+			else:
+				print("here")
+				celticTitle.setPointSize(celticTitle.pointSize() - 1);
+
+		nameLabel.setText(self.name)
+		nameLabel.setAlignment(Qt.AlignBottom)
+		nameLabel.setFont(celticTitle)
+
 		app.exec_()
 
-filename = 'Screenshot.jpg'
-app = QApplication(sys.argv)
+def makeCard(cardInfo):
+	card = Card()
 
-"""
-def take_screenshot():
-    picture = app.primaryScreen().grabWindow(topWidget.winId())
-    picture.save(filename, 'jpg')
-"""
+	card.name = f'{cardInfo["Name"]}'
+	card.cost = f'{cardInfo["Value"]}'
 
-card = Card()
-card.draw(app)
+	card.rarity = f'{cardInfo["Rarity"]}'
+	card.equipRules = f'{cardInfo["Special Equip Rules"]}'
+	card.uses = cardInfo["Uses"]
+
+	card.description = f'{cardInfo["Flavour"]}'
+
+	card.secondAbility = (f'{cardInfo["Mode"]}' == "DOUBLE")
+
+	card.situation = f'{cardInfo["Conflict Class"]}'
+	card.bonusMain = f'{cardInfo["Bonus Main"]}'
+	card.bonusSecondary = f'{cardInfo["Bonus Secondary"]}'
+	card.skills = f'{cardInfo["Skills"]}'
+
+	card.situation2 = f'{cardInfo["Conflict Class 2"]}'
+	card.bonusMain2 = f'{cardInfo["Bonus 2"]}'
+	card.bonusSecondary2 = f'{cardInfo["Bonus 2 Secondary"]}'
+	card.skills2 = f'{cardInfo["Skills 2"]}'
+
+	return card
+
+with open(dataFile, newline='') as csvItems:
+    itemsReader = csv.DictReader(csvItems, delimiter=',', quotechar='"')
+    for card in itemsReader:
+        makeCard(card).draw(app)
