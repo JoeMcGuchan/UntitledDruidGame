@@ -10,8 +10,11 @@ standardSpacing = 10
 equipRulesIndent = 8
 descriptionMargin = 7
 
-topHalfStretchFacor = 5
-bottomHalfStretchFactor = 7
+topHalfStretchFacor = 13
+bottomHalfStretchFactor = 17
+
+mediumFontSize = 24
+largeFontSize = 36
 
 filename = 'Screenshot.jpg'
 app = QApplication(sys.argv)
@@ -24,10 +27,13 @@ celticTitle = QFont(celticFontFamily, 48)
 celticExtraLarge = QFont(celticFontFamily, 64)
 basicFont = QFont(basicFontFamily, 14)
 basicFontItalic = QFont(basicFontFamily, 14, italic = True)
-basicFontMedium = QFont(basicFontFamily, 24)
-basicFontLarge = QFont(basicFontFamily, 36)
+basicFontMedium = QFont(basicFontFamily, mediumFontSize)
+basicFontLarge = QFont(basicFontFamily, largeFontSize)
 
 dataFile = "../cards/items.csv"	
+
+def convertText(string, size):
+	return string.replace("<knot>", '<img src="../images/knot_icon.png" height="' + str(size + 5) + '" width="' + str(size + 5) + '">')
 
 class Card: 
 	name = "Brooch"
@@ -52,6 +58,9 @@ class Card:
 		return not bool(self.name.strip())
 
 	def draw(self, app):
+		if self.isNull():
+			return
+
 		backgroundPixmap = QPixmap()
 
 		if (self.secondAbility):
@@ -91,8 +100,8 @@ class Card:
 		descriptionLabel.setFont(basicFontItalic)
 		descriptionLabel.setWordWrap(True)
 
-		topHalf.layout().addWidget(nameLabel, 0,0,1,4, Qt.AlignBottom | Qt.AlignLeft)
-		topHalf.layout().addWidget(costLabel, 0,4,3,2)
+		topHalf.layout().addWidget(nameLabel, 0,0,1,4, Qt.AlignBottom)
+		topHalf.layout().addWidget(costLabel, 0,4,3,2, Qt.AlignLeft)
 		topHalf.layout().addWidget(rarityLabel, 1,1,1,1)
 		topHalf.layout().addWidget(equipRulesLabel, 1,3,1,1)
 		topHalf.layout().addWidget(descriptionLabel, 3,1,1,4)
@@ -119,16 +128,17 @@ class Card:
 		bonusWidgetLayout = QVBoxLayout()
 
 		bonusMain = QLabel()
-		bonusMain.setText(self.bonusMain)
 		bonusMain.setVisible(self.bonusMain != "")
 		bonusMain.setAlignment(Qt.AlignHCenter)
 		if (self.secondAbility):
+			bonusMain.setText(convertText(self.bonusMain, mediumFontSize))
 			bonusMain.setFont(basicFontMedium)
 		else:
+			bonusMain.setText(convertText(self.bonusMain, largeFontSize))
 			bonusMain.setFont(basicFontLarge)
 
 		bonusSecondary = QLabel()
-		bonusSecondary.setText(self.bonusSecondary)
+		bonusSecondary.setText(convertText(self.bonusSecondary, mediumFontSize))
 		bonusSecondary.setVisible(self.bonusSecondary != "")
 		bonusSecondary.setAlignment(Qt.AlignHCenter)
 		bonusSecondary.setWordWrap(True)
@@ -162,13 +172,13 @@ class Card:
 			bonusWidgetLayout2 = QVBoxLayout()
 
 			bonusMain2 = QLabel()
-			bonusMain2.setText(self.bonusMain2)
+			bonusMain2.setText(convertText(self.bonusMain2,mediumFontSize))
 			bonusMain2.setVisible(self.bonusMain2 != "")
 			bonusMain2.setAlignment(Qt.AlignHCenter)
 			bonusMain2.setFont(basicFontMedium)
 
 			bonusSecondary2 = QLabel()
-			bonusSecondary2.setText(self.bonusSecondary2)
+			bonusSecondary2.setText(convertText(self.bonusSecondary2,mediumFontSize))
 			bonusSecondary2.setAlignment(Qt.AlignHCenter)
 			bonusSecondary2.setWordWrap(True)
 			bonusSecondary2.setFont(basicFontMedium)
@@ -200,9 +210,6 @@ class Card:
 		while (not fit):
 			fm = QFontMetrics(celticTitle)
 			bound = fm.boundingRect(0,0, nameLabel.width(), 48, Qt.AlignLeft, self.name)
-			print(bound)
-			print(nameLabel.width())
-			print(nameLabel.height())
 
 			if (bound.width() <= nameLabel.width()):
 				fit = True
@@ -215,9 +222,6 @@ class Card:
 		nameLabel.setFont(celticTitle)
 
 		app.exec_()
-
-def convertText(string):
-	return string#.replace("<knot>", '<img src="../fonts/knot_icon.png" height="1em" width="1em">')
 
 def makeCard(cardInfo):
 	card = Card()
@@ -234,13 +238,13 @@ def makeCard(cardInfo):
 	card.secondAbility = (f'{cardInfo["Mode"]}' == "DOUBLE")
 
 	card.situation = f'{cardInfo["Conflict Class"]}'
-	card.bonusMain = f'{convertText(cardInfo["Bonus Main"])}'
-	card.bonusSecondary = f'{convertText(cardInfo["Bonus Secondary"])}'
+	card.bonusMain = f'{cardInfo["Bonus Main"]}'
+	card.bonusSecondary = f'{cardInfo["Bonus Secondary"]}'
 	card.skills = f'{cardInfo["Skills"]}'
 
 	card.situation2 = f'{cardInfo["Conflict Class 2"]}'
-	card.bonusMain2 = f'{convertText(cardInfo["Bonus 2"])}'
-	card.bonusSecondary2 = f'{convertText(cardInfo["Bonus 2 Secondary"])}'
+	card.bonusMain2 = f'{cardInfo["Bonus 2"]}'
+	card.bonusSecondary2 = f'{cardInfo["Bonus 2 Secondary"]}'
 	card.skills2 = f'{cardInfo["Skills 2"]}'
 
 	return card
