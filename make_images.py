@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-cardSideMargins = 10
+cardSideMargins = 15
 standardSpacing = 10
 equipRulesIndent = 8
 descriptionMargin = 7
@@ -48,6 +48,9 @@ class Card:
 	bonusSecondary2 = "Eat all the rice"
 	skills2 = "yum yum yum"
 
+	def isNull(self):
+		return not bool(self.name.strip())
+
 	def draw(self, app):
 		backgroundPixmap = QPixmap()
 
@@ -65,7 +68,7 @@ class Card:
 
 		topHalf = QFrame()
 		topHalf.setLayout(QGridLayout())
-		topHalf.layout().setSpacing(0)
+		topHalf.layout().setSpacing(1)
 		topHalf.layout().setContentsMargins(0,0,0,0)
 
 		nameLabel = QLabel()
@@ -88,7 +91,7 @@ class Card:
 		descriptionLabel.setFont(basicFontItalic)
 		descriptionLabel.setWordWrap(True)
 
-		topHalf.layout().addWidget(nameLabel, 0,0,1,4)
+		topHalf.layout().addWidget(nameLabel, 0,0,1,4, Qt.AlignBottom | Qt.AlignLeft)
 		topHalf.layout().addWidget(costLabel, 0,4,3,2)
 		topHalf.layout().addWidget(rarityLabel, 1,1,1,1)
 		topHalf.layout().addWidget(equipRulesLabel, 1,3,1,1)
@@ -192,15 +195,16 @@ class Card:
 
 		#fit name text
 		fit = False
+		celticTitle.setPointSize(48)
 
 		while (not fit):
 			fm = QFontMetrics(celticTitle)
-			bound = fm.boundingRect(0,0, nameLabel.width(), nameLabel.height(), Qt.TextWordWrap | Qt.AlignLeft, self.name)
+			bound = fm.boundingRect(0,0, nameLabel.width(), 48, Qt.AlignLeft, self.name)
 			print(bound)
 			print(nameLabel.width())
 			print(nameLabel.height())
 
-			if ((bound.width() <= nameLabel.width()) and (bound.height() <= nameLabel.height())):
+			if (bound.width() <= nameLabel.width()):
 				fit = True
 			else:
 				print("here")
@@ -211,6 +215,9 @@ class Card:
 		nameLabel.setFont(celticTitle)
 
 		app.exec_()
+
+def convertText(string):
+	return string#.replace("<knot>", '<img src="../fonts/knot_icon.png" height="1em" width="1em">')
 
 def makeCard(cardInfo):
 	card = Card()
@@ -227,13 +234,13 @@ def makeCard(cardInfo):
 	card.secondAbility = (f'{cardInfo["Mode"]}' == "DOUBLE")
 
 	card.situation = f'{cardInfo["Conflict Class"]}'
-	card.bonusMain = f'{cardInfo["Bonus Main"]}'
-	card.bonusSecondary = f'{cardInfo["Bonus Secondary"]}'
+	card.bonusMain = f'{convertText(cardInfo["Bonus Main"])}'
+	card.bonusSecondary = f'{convertText(cardInfo["Bonus Secondary"])}'
 	card.skills = f'{cardInfo["Skills"]}'
 
 	card.situation2 = f'{cardInfo["Conflict Class 2"]}'
-	card.bonusMain2 = f'{cardInfo["Bonus 2"]}'
-	card.bonusSecondary2 = f'{cardInfo["Bonus 2 Secondary"]}'
+	card.bonusMain2 = f'{convertText(cardInfo["Bonus 2"])}'
+	card.bonusSecondary2 = f'{convertText(cardInfo["Bonus 2 Secondary"])}'
 	card.skills2 = f'{cardInfo["Skills 2"]}'
 
 	return card

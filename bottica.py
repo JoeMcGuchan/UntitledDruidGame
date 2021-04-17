@@ -260,4 +260,26 @@ async def item(ctx, name : str):
     else:
         await ctx.send(f"Did not find {name}")
 
+playerDeck = []
+posInPlayerDeck = 0
+
+@bot.command(name='initCombat', help='Initiate combat, feed list [name1, name2, ...].')
+async def initCombat(ctx, names : str):
+    global posInPlayerDeck, playerDeck
+    playerDeck = names[1:-1].split(",")
+    posInPlayerDeck = 0
+    await ctx.send(f"Initiative deck built: {playerDeck}")
+    random.shuffle(playerDeck)
+
+@bot.command(name='next', help='Draw next card in combat deck')
+async def next(ctx):
+    global posInPlayerDeck, playerDeck
+    await ctx.send(f"Next player {playerDeck[posInPlayerDeck]}")
+    posInPlayerDeck += 1
+    if (posInPlayerDeck == len(playerDeck) - 1):
+        await ctx.send(f"Final player {playerDeck[posInPlayerDeck]}")
+        await ctx.send(f"Last card! Shuffling...")
+        posInPlayerDeck = 0
+        random.shuffle(playerDeck)
+
 bot.run(TOKEN)
