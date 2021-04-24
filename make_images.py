@@ -222,6 +222,7 @@ class Card:
 		nameLabel.setFont(celticTitle)
 
 		app.exec_()
+		wholeCard.grab().save("output/" + self.name + ".png")
 
 def makeCard(cardInfo):
 	card = Card()
